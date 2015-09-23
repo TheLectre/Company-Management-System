@@ -279,18 +279,28 @@ public class MessageFunctionality extends BaseFunctionality {
         TableView tableView = new TableView();
         
         TableColumn dateColumn = new TableColumn("Date");
-        dateColumn.setCellFactory(new PropertyValueFactory<>("date"));
+        dateColumn.setCellFactory(new PropertyValueFactory<MessageDisplay, String>("date"));
         
         
         TableColumn fromColumn = new TableColumn("From");
-        fromColumn.setCellFactory(new PropertyValueFactory<>("from"));
+        fromColumn.setCellFactory(new PropertyValueFactory<MessageDisplay, String>("from"));
         
         TableColumn topicColumn = new TableColumn("Topic");
-        topicColumn.setCellFactory(new PropertyValueFactory<>("topic"));
-        
-        ObservableList<>
+        topicColumn.setCellFactory(new PropertyValueFactory<MessageDisplay, String>("topic"));
         
         tableView.getColumns().addAll(dateColumn, fromColumn, topicColumn);
+        
+        ArrayList<Message> messages = rManager.getMessageByReceiver(empl_id, team_id).get();
+        
+        ArrayList<MessageDisplay> displayMessages;
+        
+        for(Message p : messages) {
+            displayMessages.add(new MessageDisplay(p.getTimeStamp, p.getSender(), p.getTopic());
+        }
+
+        ObservableList<MessageDisplay> data = FXCollections.observableArrayList(displayMessages);
+
+        tableView.setItems(data);
 
         return tableView;
     }
@@ -341,4 +351,19 @@ public class MessageFunctionality extends BaseFunctionality {
     //================================================================================
     // Accessors
     //================================================================================
+    
+    //================================================================================
+    // Inner class
+    //================================================================================
+    private class MessageDisplay {
+        private String date;
+        private String sender;
+        private String topic;
+
+        MessageDisplay(String date, String sender, String topic) {
+            this.date = date;
+            this.sender = sender;
+            this.topic = topic;
+        }
+    }
 }
