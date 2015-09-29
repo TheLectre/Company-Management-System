@@ -450,7 +450,7 @@ public class MessageFunctionality extends BaseFunctionality {
     //================================================================================
     // Inner class
     //================================================================================
-    public static class MessageDisplay {
+    private static class MessageDisplay {
 
         private final int ID;
         private final SimpleStringProperty date;
@@ -469,19 +469,19 @@ public class MessageFunctionality extends BaseFunctionality {
             return "MessageDisplay{" + "ID=" + ID + ", date=" + date + ", sender=" + sender + ", topic=" + topic + '}';
         }
         
-        public int getID() {
+        int getID() {
             return ID;
         }
         
-        public String getDate() {
+        String getDate() {
             return date.get();
         }
         
-        public String getSender() {
+        String getSender() {
             return sender.get();
         }
 
-        public String getTopic() {
+        String getTopic() {
             return topic.get();
         }
         
