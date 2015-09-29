@@ -12,47 +12,48 @@ public class Message {
     private String text;
     private int senderID;
     private MessageType messageType;
-    private int employeeReceiverID;
-    private int teamReceiverID;
-    private Timestamp time_stamp;
+    private Integer employeeReceiverID;
+    private Integer teamReceiverID;
+    private Timestamp timeStamp;
     
     //================================================================================
     // Constructors
     //================================================================================
    
     //receiving, this is not in use at the moment
-    public Message(int id, String topic, String text, int senderID, String messageType, int employeeReceiverID, int teamReceiverID, Timestamp time_stamp) {
+    public Message(int id, String topic, String text, int senderID, String messageType, Integer employeeReceiverID, Integer teamReceiverID, Timestamp timeStamp) {
         this.id = id;
         this.topic = topic;
         this.text = text;
         this.senderID = senderID;
         this.employeeReceiverID = employeeReceiverID;
         this.teamReceiverID = teamReceiverID;
-        this.time_stamp = time_stamp;
+        this.timeStamp = timeStamp;
         
         convertMessageType(messageType);
     }
     
     //receiving easy way
 
-    public Message(String topic, String text, int senderID, String messageType, Timestamp time_stamp) {
+    public Message(int id, String topic, String text, int senderID, String messageType, Timestamp time_stamp) {
+        this.id = id;
         this.topic = topic;
         this.text = text;
         this.senderID = senderID;
-        this.time_stamp = time_stamp;
+        this.timeStamp = time_stamp;
         
         convertMessageType(messageType);
     }
     
     
     //creating
-    public Message(String topic, String text, int senderID, String messageType, int employeeReceiverID, int teamReceiverID, Timestamp time_stamp) {
+    public Message(String topic, String text, int senderID, String messageType, Integer employeeReceiverID, Integer teamReceiverID, Timestamp time_stamp) {
         this.topic = topic;
         this.text = text;
         this.senderID = senderID;
         this.employeeReceiverID = employeeReceiverID;
         this.teamReceiverID = teamReceiverID;
-        this.time_stamp = time_stamp;
+        this.timeStamp = time_stamp;
         
         convertMessageType(messageType);
     }
@@ -74,11 +75,9 @@ public class Message {
 
     @Override
     public String toString() {
-        return "Message{" + "id=" + id + ", topic=" + topic + ", text=" + text + ", senderID=" + senderID + ", messageType=" + messageType + ", employeeReceiverID=" + employeeReceiverID + ", teamReceiverID=" + teamReceiverID + ", time_stamp=" + time_stamp + '}';
+        return "Message{" + "id=" + id + ", topic=" + topic + ", text=" + text + ", senderID=" + senderID + ", messageType=" + messageType + ", employeeReceiverID=" + employeeReceiverID + ", teamReceiverID=" + teamReceiverID + ", time_stamp=" + timeStamp + '}';
     }
     
-    
-
     //================================================================================
     // Accessors
     //================================================================================
@@ -99,16 +98,16 @@ public class Message {
         return messageType;
     }
 
-    public int getEmployeeReceiverID() {
-        return employeeReceiverID;
+    public Integer getEmployeeReceiverID() {
+        return employeeReceiverID != null ? employeeReceiverID : null; 
     }
 
-    public int getTeamReceiverID() {
-        return teamReceiverID;
+    public Integer getTeamReceiverID() {
+        return teamReceiverID != null ? teamReceiverID : null;
     }
 
-    public Timestamp getTime_stamp() {
-        return time_stamp;
+    public Timestamp getTimeStamp() {
+        return timeStamp;
     }
 
     public String getTopic() {

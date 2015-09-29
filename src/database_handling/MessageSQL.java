@@ -2,7 +2,6 @@ package database_handling;
 
 import abstract_dao.MessageDAO;
 import business_logic.Message;
-import business_logic.MessageType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -29,7 +28,6 @@ public class MessageSQL extends BaseSQL implements MessageDAO{
     //================================================================================
     @Override
     public void addItem(Message item) {
-        System.out.println(item);
         ArrayList parameters = new ArrayList();
         parameters.add(item.getTopic());
         parameters.add(item.getText());
@@ -37,7 +35,7 @@ public class MessageSQL extends BaseSQL implements MessageDAO{
         parameters.add(item.getMessageType().toString());
         parameters.add(item.getEmployeeReceiverID());
         parameters.add(item.getTeamReceiverID());
-        parameters.add(item.getTime_stamp());
+        parameters.add(item.getTimeStamp());
         
         dbConnector.sendQuery(sqlReader.getQuery("add"), parameters);
     }
@@ -82,19 +80,21 @@ public class MessageSQL extends BaseSQL implements MessageDAO{
     }
     
     @Override
-    public Message getItemByReceiver(int empl_id, int team_id) {
+    public ArrayList<Message> getItemsByReceiver(Integer empl_id, Integer team_id) {
         ArrayList parameters = new ArrayList();
-        parameters.add(empl_id);
-        parameters.add(team_id);
+        ArrayList<Message> messages = new ArrayList<>();
+        parameters.add(empl_id != null ? empl_id : null);
+        parameters.add(team_id != null ? team_id : null);
         ResultSet rs = dbConnector.sendQuery(sqlReader.getQuery("get_by_receiver"), parameters).get();
         try {
-            rs.next();
-            return new Message(rs.getString(1), rs.getString(2), rs.getInt(3), rs.getString(4), rs.getTimestamp(5));
+            while(rs.next()) {
+                messages.add(new Message(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getString(5), rs.getTimestamp(6)));
+            }
         } catch (SQLException ex) {
             Logger.getLogger(MessageSQL.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return null;
+        return messages;
     }
 
     @Override

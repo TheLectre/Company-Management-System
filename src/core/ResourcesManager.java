@@ -15,6 +15,7 @@ import database_handling.MessageSQL;
 import database_handling.PromotionSQL;
 import database_handling.TeamSQL;
 import database_handling.TechnologySQL;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -150,8 +151,8 @@ public class ResourcesManager {
                 return msg.getItemByID(id);
             }
             
-            public Message getMessageByReceiver(int employee_id, int team_id) {
-                return msg.getItemByReceiver(employee_id, team_id);
+            public ArrayList<Message> getMessagesByReceiver(Integer employee_id, Integer team_id) {
+                return msg.getItemsByReceiver(employee_id, team_id);
             }
             
             public List<Message> getAllMessages() {
