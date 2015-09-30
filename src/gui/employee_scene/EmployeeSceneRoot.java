@@ -56,6 +56,7 @@ public class EmployeeSceneRoot extends BorderPane {
         functionalities.add(new EmployeePromotionFunctionality(this, rManager));
         functionalities.add(new AdminPromotionFunctionality(this, rManager));
         functionalities.add(new MessageFunctionality(this, rManager));
+        functionalities.add(new TeamViewFunctionality(this, rManager));
     }
     
     private void initiateInfoPanel() {
