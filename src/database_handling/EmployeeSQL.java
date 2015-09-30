@@ -118,6 +118,22 @@ public class EmployeeSQL extends BaseSQL implements EmployeeDAO {
         }
         return null;
     }
+    
+    @Override
+    public List<Employee> getAllByTeamID(int teamID) {
+        List<Employee> employees = new ArrayList<>();
+        ArrayList parameters = new ArrayList();
+        parameters.add(teamID);
+        ResultSet rs = dbConnector.sendQuery(sqlReader.getQuery("get_all_of_team_id", parameters).get();
+        try {
+            rs.next();
+            employees.add(null /*TODO*/);
+        }
+        catch(SQLException ex) {
+            Logger.getLogger(EmployeeSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return employees;
+    }
 
     @Override
     public List<Employee> getAll() {
