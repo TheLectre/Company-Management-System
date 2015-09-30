@@ -46,11 +46,32 @@ public class TeamViewFunctionality extends BasicFunctionality {
     }
     
     public TableView createTeamTable() {
-      TableView tableView<EmployeeDisplay> = new TableView<>();
-      
-      ArrayList teamMembers = rManager.getEmployeesByTeamID(/*teamID*/ rManager.getEmployee().getTeam().getID());
+        //table and columns
+        TableView tableView<EmployeeDisplay> = new TableView<>();
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        tableView.setEditable(false);
+        
+        TableColumn firstNameColumn = new TableColumn("First Name");
+        firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        
+        TableColumn lastNameColumn = new TableColumn("Last Name");
+        fromColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        
+        TableColumn positionColumn = new TableColumn("Position");
+        fromColumn.setCellValueFactory(new PropertyValueFactory<>("position"));
+        
+        //data
+        ArrayList teamMembers = rManager.getEmployeesByTeamID(/*teamID*/ rManager.getEmployee().getTeam().getID());
 
-    
+        ObservableList<EmployeeDisplay> data = FXCollections.observableArrayList();
+        
+        for(EmployeeDisplay p : teamMembers) {
+            data.add(new EmployeeDisplay(p.getID(), p.getFirstName(), p.getLastName(), p.getExperience().toString()));
+        }
+
+        //visualization
+        tableView.getColumns().add(firstNameColumn, lastNameColumn, positionColumn);
+        tableView.setItems(data);
 
       return tableView();
     }
@@ -65,9 +86,14 @@ public class TeamViewFunctionality extends BasicFunctionality {
       private final int ID;
       private final SimpleStringProperty firstName;
       private final SimpleStringProperty lastName;
-      private final SimpleStringProperty technologyName;
       private final SimpleStringProperty position;
       
+      public EmployeeDisplay(int ID, String firstName, String lastName, String position) {
+          this.ID = ID;
+          this.firstName = new SimpleStringProperty(firstName);
+          this.lastName = new SimpleStringProperty(lastName);
+          this.position = new SimpleStringProperty(position);
+      }
     }
   
 }
