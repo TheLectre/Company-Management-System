@@ -55,6 +55,28 @@ public class Employee {
         
         convertExperience(experience);
     }
+    
+    //used only in TeamView
+
+    public Employee(int id, String firstName, String lastName, String experience) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        
+        convertExperience(experience);
+    }
+
+    //statistics in teams management
+
+    public Employee(String experience, int salary, Team team) {
+        this.salary = salary;
+        this.team = team;
+        
+        convertExperience(experience);
+    }
+    
+    
+    
 
     //================================================================================
     // Methods

@@ -12,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -21,7 +23,6 @@ public abstract class LogInGroup extends Group {
     //================================================================================
     // Fields
     //================================================================================
-
     private final ResourcesManager rManager;
 
     private GridPane gridPane;
@@ -36,16 +37,16 @@ public abstract class LogInGroup extends Group {
     public LogInGroup(ResourcesManager rManager) {
         this.rManager = rManager;
 
-        initiateLabels();
-        initiateFields();
-        initiateSubmitButton();
-        initiateGridPane();
+        initializeLabels();
+        initializeFields();
+        initializeSubmitButton();
+        initializeGridPane();
     }
 
     //================================================================================
     // Methods
     //================================================================================
-    private void initiateGridPane() {
+    private void initializeGridPane() {
         gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -59,32 +60,67 @@ public abstract class LogInGroup extends Group {
         gridPane.add(submitButton, 1, 2);
     }
 
-    private void initiateLabels() {
+    private void initializeLabels() {
         labels = new Label[2];
         labels[0] = new Label("Login");
         labels[1] = new Label("Password");
     }
 
-    private void initiateFields() {
+    private void initializeFields() {
         loginField = new TextField();
+        loginField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode() == KeyCode.ENTER) {
+                    proceedSubmitEvent();
+                }
+            }
+            
+        });
+        
         passwordField = new PasswordField();
+        passwordField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode() == KeyCode.ENTER) {
+                    proceedSubmitEvent();
+                }
+            }
+            
+        });
     }
 
-    private void initiateSubmitButton() {
+    private void initializeSubmitButton() {
         submitButton = new Button("Submit");
 
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
-                if(loginField.getText().length() < 5 || loginField.getText().length() > 15 || passwordField.getText().length() < 5 || passwordField.getText().length() > 15) {
-                    createFailLogInAttemptStage("Enter valid login and password");
-                }
-                else {
-                    proceedLogIn(loginField.getText(), passwordField.getText());
-                }
+                proceedSubmitEvent();
             }
         });
+        
+        submitButton.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode() == KeyCode.ENTER) {
+                    proceedSubmitEvent();
+                }
+            }
+            
+        });
+    }
+
+    private void proceedSubmitEvent() {
+        if (loginField.getText().length() < 5 || loginField.getText().length() > 15 || passwordField.getText().length() < 5 || passwordField.getText().length() > 15) {
+            createFailLogInAttemptStage("Enter valid login and password");
+        } else {
+            proceedLogIn(loginField.getText(), passwordField.getText());
+        }
     }
 
     private void proceedLogIn(String login, String password) {
@@ -111,6 +147,14 @@ public abstract class LogInGroup extends Group {
                 stage.close();
             }
         });
+        button.setOnKeyPressed(new EventHandler<KeyEvent>() {
+
+            @Override
+            public void handle(KeyEvent event) {
+                stage.close();
+            }
+            
+        });
 
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
@@ -123,9 +167,9 @@ public abstract class LogInGroup extends Group {
         stage.setScene(new Scene(vBox, 220, 120));
         stage.show();
     }
-    
+
     public abstract void onSuccessfulLogIn(Employee employee);
-    
+
     //================================================================================
     // Accessors
     //================================================================================

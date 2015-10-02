@@ -19,7 +19,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -63,7 +62,7 @@ public class MessageFunctionality extends BaseFunctionality {
 
     //receiving
     private TableView messageList;
-    
+
     //reading
     private MessageDisplay processedMessage; // to avoid creating a lot of parameters in methods
     private Label senderLabel;
@@ -160,21 +159,20 @@ public class MessageFunctionality extends BaseFunctionality {
     private void loadReadingMode() {
         reading = new VBox();
         reading.setAlignment(Pos.CENTER);
-        
+
         senderLabel = createSenderLabel();
         dateLabel = createDateLabel();
         topicLabel = createTopicLabel();
         deliveredMessage = createDeliveredMessage();
         backButton = createBackButton();
-       
-        
+
         reading.getChildren().add(senderLabel);
         reading.getChildren().add(dateLabel);
         reading.getChildren().add(topicLabel);
         reading.getChildren().add(deliveredMessage);
         reading.getChildren().add(backButton);
     }
-    
+
     private ComboBox<String> createMessageType() {
         ComboBox<String> type = new ComboBox<>();
         type.setPromptText("Message type");
@@ -313,14 +311,14 @@ public class MessageFunctionality extends BaseFunctionality {
         //table and columns
         TableView<MessageDisplay> tableView = new TableView<>();
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        
+
         tableView.setCursor(Cursor.HAND);
         tableView.setEditable(false);
-        
+
         TableColumn dateColumn = new TableColumn("Date");
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         dateColumn.maxWidthProperty().bind(tableView.widthProperty().multiply(0.35f));
-        
+
         TableColumn fromColumn = new TableColumn("Sender");
         fromColumn.setCellValueFactory(new PropertyValueFactory<>("sender"));
         fromColumn.maxWidthProperty().bind(tableView.widthProperty().multiply(0.25f));
@@ -328,14 +326,16 @@ public class MessageFunctionality extends BaseFunctionality {
         TableColumn topicColumn = new TableColumn("Topic");
         topicColumn.setCellValueFactory(new PropertyValueFactory<>("topic"));
         topicColumn.maxWidthProperty().bind(tableView.widthProperty().multiply(0.4f));
-        
+
         //to the selected message
         tableView.setRowFactory(tView -> {
             TableRow<MessageDisplay> tableRow = new TableRow<>();
             tableRow.setOnMouseClicked(event -> {
-                this.processedMessage = tableRow.getItem();
-                loadReadingMode();
-                mainPane.setCenter(reading);
+                if (tableRow.getItem() != null) {
+                    this.processedMessage = tableRow.getItem();
+                    loadReadingMode();
+                    mainPane.setCenter(reading);
+                }
             });
             return tableRow;
         });
@@ -351,46 +351,46 @@ public class MessageFunctionality extends BaseFunctionality {
             SimpleDateFormat sdf = new SimpleDateFormat("d MMM K:m a", Locale.ENGLISH);
             data.add(new MessageDisplay(p.getID(), sdf.format(p.getTimeStamp()), senderEmpl.getFirstName() + " " + senderEmpl.getLastName(), p.getTopic()));
         }
-        
+
         //visualization
         tableView.getColumns().addAll(dateColumn, fromColumn, topicColumn);
         tableView.setItems(data);
-        
+
         return tableView;
     }
 
     private Label createSenderLabel() {
         Label label = new Label(processedMessage.getSender());
-        
+
         return label;
     }
-    
+
     private Label createDateLabel() {
         Label label = new Label(processedMessage.getDate());
-        
+
         return label;
     }
-    
+
     private Label createTopicLabel() {
         Label label = new Label(processedMessage.getTopic());
-        
+
         return label;
     }
-    
+
     private TextArea createDeliveredMessage() {
         TextArea textArea = new TextArea(rManager.getMessageByID(processedMessage.getID()).getText());
-        
+
         textArea.setEditable(false);
         textArea.setWrapText(true);
         textArea.setMaxHeight(100);
         textArea.setMaxWidth(200);
-        
+
         return textArea;
     }
-    
+
     private Button createBackButton() {
         Button button = new Button("Back");
-        
+
         button.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -398,11 +398,11 @@ public class MessageFunctionality extends BaseFunctionality {
                 loadReceivingMode();
                 mainPane.setCenter(receiving);
             }
-        } );
-        
+        });
+
         return button;
     }
-    
+
     private boolean isNameValid() {
         for (String p : addressee.getEntries()) {
             if (p.equals(addressee.getText())) {
@@ -450,7 +450,7 @@ public class MessageFunctionality extends BaseFunctionality {
     //================================================================================
     // Inner class
     //================================================================================
-    private static class MessageDisplay {
+    public static class MessageDisplay {
 
         private final int ID;
         private final SimpleStringProperty date;
@@ -468,23 +468,23 @@ public class MessageFunctionality extends BaseFunctionality {
         public String toString() {
             return "MessageDisplay{" + "ID=" + ID + ", date=" + date + ", sender=" + sender + ", topic=" + topic + '}';
         }
-        
-        int getID() {
+
+        public int getID() {
             return ID;
         }
-        
-        String getDate() {
+
+        public String getDate() {
             return date.get();
         }
-        
-        String getSender() {
+
+        public String getSender() {
             return sender.get();
         }
 
-        String getTopic() {
+        public String getTopic() {
             return topic.get();
         }
-        
+
     }
-    
+
 }

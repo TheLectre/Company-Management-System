@@ -128,7 +128,11 @@ public class ResourcesManager {
             }
             
             public List<Employee> getEmployeesByTeamID(int team_id) {
-                return empl.getAllByTeamID();
+                return empl.getAllOfTeamID(team_id);
+            }
+            
+            public List<Employee> getTeamedEmployees() {
+                return empl.getAllTeamed();
             }
             
             public List<Employee> getAllEmployees() {

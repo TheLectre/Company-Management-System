@@ -120,18 +120,34 @@ public class EmployeeSQL extends BaseSQL implements EmployeeDAO {
     }
     
     @Override
-    public List<Employee> getAllByTeamID(int teamID) {
+    public List<Employee> getAllOfTeamID(int teamID) {
         List<Employee> employees = new ArrayList<>();
         ArrayList parameters = new ArrayList();
         parameters.add(teamID);
-        ResultSet rs = dbConnector.sendQuery(sqlReader.getQuery("get_all_of_team_id", parameters).get();
+        ResultSet rs = dbConnector.sendQuery(sqlReader.getQuery("get_all_of_team_id"), parameters).get();
         try {
-            rs.next();
-            employees.add(null /*TODO*/);
-        }
-        catch(SQLException ex) {
+            while(rs.next()) {
+                employees.add(new Employee(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+            }
+        } catch (SQLException ex) {
             Logger.getLogger(EmployeeSQL.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return employees;
+    }
+    
+    @Override
+    public List<Employee> getAllTeamed() {
+        List<Employee> employees = new ArrayList<>();
+        ResultSet rs = dbConnector.sendQuery(sqlReader.getQuery("get_all_teamed")).get();
+        try {
+            while(rs.next()) {
+                employees.add(new Employee(rs.getString(1), rs.getInt(2), new Team(rs.getInt(3))));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
         return employees;
     }
 
