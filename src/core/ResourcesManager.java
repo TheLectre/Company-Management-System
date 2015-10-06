@@ -115,6 +115,10 @@ public class ResourcesManager {
                 empl.updateItem(employee);
             }
             
+            public void updateEmployeeTeam(int employee_id, Integer team_id) {
+                empl.updateItemTeam(employee_id, team_id);
+            }
+            
             public void removeEmployee(int id) {
                 empl.removeItem(id);
             }
@@ -135,8 +139,24 @@ public class ResourcesManager {
                 return empl.getAllTeamed();
             }
             
-            public List<Employee> getAllEmployees() {
+            public List<Employee> getTeamFreeEmployeesOfTechnologyID(int technology_id) {
+                return empl.getAllTeamFreeOfTechnologyID(technology_id);
+            }
+            
+            public List<Employee> getAllAcceptedEmployees() {
                 return empl.getAll();
+            }
+            
+            public List<Integer> getSalariesOfAllEmployees() {
+                return empl.getSalariesOfAll();
+            }
+            
+            public List<Integer> getSalariesOfTechnologyMembers(int technology_id) {
+                return empl.getSalariesOfTechnology(technology_id);
+            }
+            
+            public List<Integer> getSalariesOfTeamMembers(int team_id) {
+                return empl.getSalariesOfTechnology(team_id);
             }
             
         //================================================================================

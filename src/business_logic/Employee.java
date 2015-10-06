@@ -56,8 +56,8 @@ public class Employee {
         convertExperience(experience);
     }
     
-    //used only in TeamView
-
+    //used in TeamView
+    //TeamView assigning employee to team
     public Employee(int id, String firstName, String lastName, String experience) {
         this.id = id;
         this.firstName = firstName;
@@ -74,6 +74,9 @@ public class Employee {
         
         convertExperience(experience);
     }
+    
+    //teamview assigning employee to team
+    
     
     
     

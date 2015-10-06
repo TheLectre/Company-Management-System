@@ -7,7 +7,7 @@ import gui.employee_scene.functionalities.ChangePasswordFunctionality;
 import gui.employee_scene.functionalities.EmployeePromotionFunctionality;
 import gui.employee_scene.functionalities.MessageFunctionality;
 import gui.employee_scene.functionalities.TeamViewFunctionality;
-import gui.employee_scene.functionalities.TeamsFunctionality;
+import gui.employee_scene.functionalities.StatisticsFunctionality;
 import java.util.ArrayList;
 import javafx.geometry.Pos;
 import javafx.scene.control.ToolBar;
@@ -59,7 +59,7 @@ public class EmployeeSceneRoot extends BorderPane {
         functionalities.add(new AdminPromotionFunctionality(this, rManager));
         functionalities.add(new MessageFunctionality(this, rManager));
         functionalities.add(new TeamViewFunctionality(this, rManager));
-        functionalities.add(new TeamsFunctionality(this, rManager));
+        functionalities.add(new StatisticsFunctionality(this, rManager));
     }
     
     private void initiateInfoPanel() {

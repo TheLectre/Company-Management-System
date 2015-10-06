@@ -109,7 +109,7 @@ public class DataBaseConnector {
     private void disconnect(Connection conn, Statement stmt) {
         try {
             if (stmt != null) {
-                conn.close();
+                stmt.close();
             }
             if (conn != null) {
                 conn.close();

@@ -212,7 +212,7 @@ public class MessageFunctionality extends BaseFunctionality {
                         addressee.setDisable(false);
                     }
 
-                    List<Employee> employees = rManager.getAllEmployees();
+                    List<Employee> employees = rManager.getAllAcceptedEmployees();
                     addressee.getEntries().clear();
 
                     for (Employee p : employees) {

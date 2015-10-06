@@ -31,11 +31,7 @@ public class EmployeeSQL extends BaseSQL implements EmployeeDAO {
         parameters.add(item.getSalary());
         parameters.add(item.getTechnology().getID());
 
-        if (item.getTeam() == null) {
-            parameters.add(null);
-        } else {
-            parameters.add(item.getTeam().getID());
-        }
+        parameters.add(item.getTeam() == null ? null : item.getTeam().getID());
 
         parameters.add(item.getLogin());
         parameters.add(item.getPassword());
@@ -59,17 +55,23 @@ public class EmployeeSQL extends BaseSQL implements EmployeeDAO {
         parameters.add(item.getSalary());
         parameters.add(item.getTechnology().getID());
 
-        if (item.getTeam() == null) {
-            parameters.add(null);
-        } else {
-            parameters.add(item.getTeam().getID());
-        }
+        parameters.add(item.getTeam() == null ? null : item.getTeam().getID());
 
         parameters.add(item.getPassword());
         parameters.add(item.isAccepted());
         parameters.add(item.getID());
         
         dbConnector.sendQuery(sqlReader.getQuery("update"), parameters);
+    }
+    
+    @Override
+    public void updateItemTeam(int empl_id, Integer team_id) {
+        ArrayList parameters = new ArrayList();
+        //remember, inverted order
+        parameters.add(team_id == null ? null : team_id);
+        parameters.add(empl_id);
+       
+        dbConnector.sendQuery(sqlReader.getQuery("update_team"), parameters);
     }
 
     @Override
@@ -94,7 +96,7 @@ public class EmployeeSQL extends BaseSQL implements EmployeeDAO {
                 return new Employee(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getInt(5), technology, new Team(rs.getInt(7), rs.getString(11), technology), login, rs.getString(8), rs.getBoolean(9));
             }
         } catch (SQLException ex) {
-            //Logger.getLogger(EmployeeSQL.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EmployeeSQL.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
@@ -150,6 +152,23 @@ public class EmployeeSQL extends BaseSQL implements EmployeeDAO {
         
         return employees;
     }
+    
+    @Override
+    public List<Employee> getAllTeamFreeOfTechnologyID(int technology_id) {
+        ArrayList parameters = new ArrayList();
+        parameters.add(technology_id);
+        
+        List<Employee> employees = new ArrayList<>();
+        ResultSet rs = dbConnector.sendQuery(sqlReader.getQuery("get_team_free_of_technology"), parameters).get();
+        try {
+            while(rs.next()) {
+                employees.add(new Employee(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return employees;
+    }
 
     @Override
     public List<Employee> getAll() {
@@ -170,6 +189,52 @@ public class EmployeeSQL extends BaseSQL implements EmployeeDAO {
         }
             
         return employees;
+    }
+    
+    @Override
+    public List<Integer> getSalariesOfAll() {
+        List<Integer> salaries = new ArrayList<>();
+        ResultSet rs = dbConnector.sendQuery(sqlReader.getQuery("get_salaries_of_all")).get();
+        try {
+            while(rs.next()) {
+                salaries.add(rs.getInt(1));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return salaries;
+    }
+    
+    @Override
+    public List<Integer> getSalariesOfTechnology(int technology_id) {
+        ArrayList parameters = new ArrayList();
+        parameters.add(technology_id);
+        List<Integer> salaries = new ArrayList<>();
+        ResultSet rs = dbConnector.sendQuery(sqlReader.getQuery("get_salaries_of_technology"), parameters).get();
+        try {
+            while(rs.next()) {
+                salaries.add(rs.getInt(1));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return salaries;
+    }
+    
+    @Override
+    public List<Integer> getSalariesOfTeam(int team_id) {
+        ArrayList parameters = new ArrayList();
+        parameters.add(team_id);
+        List<Integer> salaries = new ArrayList<>();
+        ResultSet rs = dbConnector.sendQuery(sqlReader.getQuery("get_salaries_of_team"), parameters).get();
+        try {
+            while(rs.next()) {
+                salaries.add(rs.getInt(1));
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmployeeSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return salaries;
     }
     //================================================================================
     // Accessors
