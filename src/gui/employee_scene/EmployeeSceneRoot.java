@@ -3,11 +3,14 @@ package gui.employee_scene;
 import business_logic.Employee;
 import core.ResourcesManager;
 import gui.employee_scene.functionalities.AdminPromotionFunctionality;
+import gui.employee_scene.functionalities.AppliesFunctionality;
 import gui.employee_scene.functionalities.ChangePasswordFunctionality;
 import gui.employee_scene.functionalities.EmployeePromotionFunctionality;
+import gui.employee_scene.functionalities.EmployeesFunctionality;
 import gui.employee_scene.functionalities.MessageFunctionality;
 import gui.employee_scene.functionalities.TeamViewFunctionality;
 import gui.employee_scene.functionalities.StatisticsFunctionality;
+import gui.employee_scene.functionalities.TechnologiesFunctioanlity;
 import java.util.ArrayList;
 import javafx.geometry.Pos;
 import javafx.scene.control.ToolBar;
@@ -60,6 +63,9 @@ public class EmployeeSceneRoot extends BorderPane {
         functionalities.add(new MessageFunctionality(this, rManager));
         functionalities.add(new TeamViewFunctionality(this, rManager));
         functionalities.add(new StatisticsFunctionality(this, rManager));
+        functionalities.add(new AppliesFunctionality(this, rManager));
+        functionalities.add(new TechnologiesFunctioanlity(this, rManager));
+        functionalities.add(new EmployeesFunctionality(this, rManager));
     }
     
     private void initiateInfoPanel() {

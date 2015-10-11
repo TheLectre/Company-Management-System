@@ -3,6 +3,7 @@ package gui.employee_scene.functionalities;
 import business_logic.Employee;
 import business_logic.Experience;
 import business_logic.Team;
+import business_logic.Technology;
 import core.ResourcesManager;
 import gui.employee_scene.BaseFunctionality;
 import gui.employee_scene.EmployeeSceneRoot;
@@ -26,6 +27,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ScrollPane.ScrollBarPolicy;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
@@ -45,6 +47,8 @@ public class TeamViewFunctionality extends BaseFunctionality {
     private Label noTeamLabel;
     private Button addEmployeeButton;
     private Button removeEmployeeButton;
+    private Button addNewTeamButton;
+    private Button deleteTeamButton;
 
     //data
     private ObservableList<EmployeeDisplay> viewedEmployeeData;
@@ -80,11 +84,12 @@ public class TeamViewFunctionality extends BaseFunctionality {
 
             if (admin) {
                 addEmployeeButton = createAddEmployeeButton();
-
                 removeEmployeeButton = createRemoveEmployeeButton();
+                addNewTeamButton = createAddNewTeamButton();
+                deleteTeamButton = createDeleteTeamButton();
 
                 HBox buttonBox = new HBox();
-                buttonBox.getChildren().addAll(removeEmployeeButton, addEmployeeButton);
+                buttonBox.getChildren().addAll(removeEmployeeButton, addEmployeeButton, addNewTeamButton, deleteTeamButton);
                 mainPane.getChildren().add(buttonBox);
             }
         } else {
@@ -109,7 +114,7 @@ public class TeamViewFunctionality extends BaseFunctionality {
         return label;
     }
 
-    private ComboBox createTeamNameComboBox() {
+    private ComboBox<Team> createTeamNameComboBox() {
         ComboBox<Team> comboBox = new ComboBox<>();
 
         List<Team> teams = rManager.getAllTeams();
@@ -175,10 +180,19 @@ public class TeamViewFunctionality extends BaseFunctionality {
         for (Employee p : currentTeamMembers) {
             viewedEmployeeData.add(new EmployeeDisplay(p.getID(), ++index, p.getFirstName(), p.getLastName(), p.getExperience().toString()));
         }
-
+        
         teamTable.setItems(viewedEmployeeData);
     }
 
+    private void refreshAdminView() {
+        teamNameNode = createTeamNameComboBox();
+        
+        mainPane.getChildren().remove(0);
+        mainPane.getChildren().add(0, teamNameNode);
+        
+        refreshTeamTable(((ComboBox<Team>)teamNameNode).getValue().getID());
+    }
+    
     private Button createAddEmployeeButton() {
         Button addButton = new Button("Assign employee");
 
@@ -353,6 +367,122 @@ public class TeamViewFunctionality extends BaseFunctionality {
         return removeButton;
     }
 
+    private Button createAddNewTeamButton() {
+        Button addButton = new Button("Create team");
+        
+        addButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                Stage stage = new Stage();
+                stage.setTitle("Creating team");
+                
+                TextField teamNameField = new TextField();
+                teamNameField.setPromptText("Team name");
+                
+                ComboBox<String> technologyComboBox = new ComboBox<>();
+                for(Technology p : rManager.getAllTechnologies()) {
+                    technologyComboBox.getItems().add(p.getName());
+                }
+                technologyComboBox.setPromptText("Technology");
+                
+                Label errorLabel = new Label();
+                
+                Button addButton = new Button("Create");
+                addButton.setOnAction(new EventHandler<ActionEvent>() {
+
+                    @Override
+                    public void handle(ActionEvent event) {
+                        if(teamNameField.getText().length() > 20 || teamNameField.getText().length() < 3) {
+                            errorLabel.setText("Invalid team name length <3-20> characters");
+                        }
+                        else if(rManager.getTeamID(teamNameField.getText()) != 0) {
+                            errorLabel.setText("Team name already in use");
+                        }
+                        else if(technologyComboBox.getValue() == null) {
+                            errorLabel.setText("Choose a technology");
+                        }
+                        else { // SUCCESSFUL
+                            rManager.addNewTeam(new Team(teamNameField.getText(), new Technology(rManager.getTechnologyID(technologyComboBox.getValue()), technologyComboBox.getValue())));
+                            stage.close();
+                            refreshAdminView();
+                        }
+                    }
+                });
+                
+                Button cancelButton = new Button("Cancel");
+                cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+
+                    @Override
+                    public void handle(ActionEvent event) {
+                        stage.close();
+                    }
+                });
+                                
+                HBox buttons = new HBox();
+                buttons.getChildren().addAll(addButton, cancelButton);
+                
+                
+                VBox majorPane = new VBox();
+                majorPane.getChildren().addAll(teamNameField, technologyComboBox, buttons, errorLabel);
+                
+                stage.setScene(new Scene(majorPane, 400, 300));
+                stage.show();
+            }
+        });
+        
+        return addButton;
+    }
+    
+    private Button createDeleteTeamButton() {
+        Button deleteButton = new Button("Delete team");
+        
+        deleteButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                String teamName = ((ComboBox<Team>)teamNameNode).getValue().getName();
+                Stage stage = new Stage();
+                stage.setTitle("Deleting team");
+                
+                Label infoLabel = new Label("You are about to delete " + teamName + ".");
+                Label secondInfoLabel = new Label("This action will not fire employees.");
+                Label thirdInfoLabel = new Label("Are you sure? ");
+                
+                Button okButton = new Button("Delete");
+                okButton.setOnAction(new EventHandler<ActionEvent>() {
+
+                    @Override
+                    public void handle(ActionEvent event) {
+                        rManager.removeTeam(rManager.getTeamID(teamName));
+                        stage.close();
+                        refreshAdminView();
+                    }
+                });
+                
+                Button cancelButton = new Button("Cancel");
+                cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+
+                    @Override
+                    public void handle(ActionEvent event) {
+                        stage.close();
+                    }
+                });
+                
+                HBox buttonsPane = new HBox();
+                buttonsPane.getChildren().addAll(okButton, cancelButton);
+                
+                VBox majorPane = new VBox();
+                majorPane.getChildren().addAll(infoLabel, secondInfoLabel, thirdInfoLabel, buttonsPane);
+                
+                stage.setScene(new Scene(majorPane, 300, 200));
+                stage.show();
+            }
+        });
+        
+        return deleteButton;
+    }
+    
     //================================================================================
     // Accessors
     //================================================================================

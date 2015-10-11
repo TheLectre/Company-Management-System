@@ -6,6 +6,7 @@ import abstract_dao.PromotionDAO;
 import abstract_dao.TeamDAO;
 import abstract_dao.TechnologyDAO;
 import business_logic.Employee;
+import business_logic.Experience;
 import business_logic.Message;
 import business_logic.Promotion;
 import business_logic.Team;
@@ -46,7 +47,7 @@ public class ResourcesManager {
     //================================================================================
     // Methods
     //================================================================================
-    
+        
         //================================================================================
         // Technology
         //================================================================================
@@ -119,6 +120,14 @@ public class ResourcesManager {
                 empl.updateItemTeam(employee_id, team_id);
             }
             
+            public void acceptJobApply(int employee_id) {
+                empl.updateAccepted(employee_id);
+            }
+            
+            public int getNumberOfApplies() {
+                return empl.getNumberOfApplies();
+            }
+            
             public void removeEmployee(int id) {
                 empl.removeItem(id);
             }
@@ -129,6 +138,10 @@ public class ResourcesManager {
             
             public Employee getEmployeeByID(int id) {
                 return empl.getItemByID(id);
+            }
+            
+            public Employee getNotAcceptedEmployee() {
+                return empl.getNotAccepted();
             }
             
             public List<Employee> getEmployeesByTeamID(int team_id) {
@@ -147,16 +160,20 @@ public class ResourcesManager {
                 return empl.getAll();
             }
             
-            public List<Integer> getSalariesOfAllEmployees() {
-                return empl.getSalariesOfAll();
+            public List<Employee> getAllNotAcceptedEmployees() {
+                return empl.getAllNotAccepted();
             }
             
-            public List<Integer> getSalariesOfTechnologyMembers(int technology_id) {
-                return empl.getSalariesOfTechnology(technology_id);
+            public List<Integer> getSalariesOfAllEmployees(Experience exp) {
+                return empl.getSalariesOfAll(exp);
             }
             
-            public List<Integer> getSalariesOfTeamMembers(int team_id) {
-                return empl.getSalariesOfTechnology(team_id);
+            public List<Integer> getSalariesOfTechnologyMembers(int technology_id, Experience exp) {
+                return empl.getSalariesOfTechnology(technology_id, exp);
+            }
+            
+            public List<Integer> getSalariesOfTeamMembers(int team_id, Experience exp) {
+                return empl.getSalariesOfTeam(team_id, exp);
             }
             
         //================================================================================

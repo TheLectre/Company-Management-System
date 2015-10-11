@@ -45,12 +45,12 @@ public abstract class ApplyGroup extends Group {
 
     public ApplyGroup(ResourcesManager rManager) {
         this.rManager = rManager;
-        initiateLabels();
-        initiateTextFields();
-        initiatePasswordFields();
-        initiateComboBoxes();
-        initiateSubmitButton();
-        initiateGridPane();
+        initializeLabels();
+        initializeTextFields();
+        initializePasswordFields();
+        initializeComboBoxes();
+        initializeSubmitButton();
+        initializeGridPane();
     }
 
     //================================================================================
@@ -59,7 +59,7 @@ public abstract class ApplyGroup extends Group {
 
     public abstract void onSuccessfulApply();
     
-    private void initiateGridPane() {
+    private void initializeGridPane() {
         gridPane = new GridPane();
         gridPane.setHgap(10);
         gridPane.setVgap(10);
@@ -82,7 +82,7 @@ public abstract class ApplyGroup extends Group {
         gridPane.add(warningLabel, 1, 9);  
     }
     
-    private void initiateLabels() {
+    private void initializeLabels() {
         labels = new Label[8];
         String[] names = {"First Name", "Last Name", "Login", "Password", "Password Again", "Programming Language", "Experience", "Prefered Salary"};
            
@@ -94,7 +94,7 @@ public abstract class ApplyGroup extends Group {
         warningLabel.setVisible(false);
     }
     
-    private void initiateTextFields() {
+    private void initializeTextFields() {
         textFields = new TextField[4];
         
         for(int i=0;i<textFields.length;i++) {
@@ -141,7 +141,7 @@ public abstract class ApplyGroup extends Group {
         });
     }    
     
-    private void initiatePasswordFields() {
+    private void initializePasswordFields() {
         passwordFields = new PasswordField[2];
         
         for(int i=0;i<passwordFields.length;i++) {
@@ -168,7 +168,7 @@ public abstract class ApplyGroup extends Group {
         });
     }
     
-    private void initiateComboBoxes() {
+    private void initializeComboBoxes() {
         comboBoxes = new ComboBox[2];
         for(int i=0;i<comboBoxes.length;i++) {
             comboBoxes[i] = new ComboBox();
@@ -208,7 +208,7 @@ public abstract class ApplyGroup extends Group {
         });
     }
 
-    private void initiateSubmitButton() {
+    private void initializeSubmitButton() {
         submitButton = new Button("Submit");
         
         submitButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -321,7 +321,7 @@ public abstract class ApplyGroup extends Group {
         switch(isFormCorrect()) {
             case 0: warningLabel.setText("Invalid first name"); return false;
             case 1: warningLabel.setText("Invalid last name"); return false;
-            case 2: warningLabel.setText("Login already exists"); return false;
+            case 2: warningLabel.setText("This login is already taken"); return false;
             case 3: warningLabel.setText("Invalid login"); return false;
             case 4: warningLabel.setText("Invalid password"); return false;
             case 5: warningLabel.setText("Passwords have to match"); return false;

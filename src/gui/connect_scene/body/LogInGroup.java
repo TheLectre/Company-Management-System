@@ -117,7 +117,7 @@ public abstract class LogInGroup extends Group {
 
     private void proceedSubmitEvent() {
         if (loginField.getText().length() < 5 || loginField.getText().length() > 15 || passwordField.getText().length() < 5 || passwordField.getText().length() > 15) {
-            createFailLogInAttemptStage("Enter valid login and password");
+            createFailLogInAttemptStage("Enter valid login and password", "Try again!");
         } else {
             proceedLogIn(loginField.getText(), passwordField.getText());
         }
@@ -126,18 +126,18 @@ public abstract class LogInGroup extends Group {
     private void proceedLogIn(String login, String password) {
         Employee empl = rManager.getEmployeeByLogin(login);
         if (empl == null) {
-            createFailLogInAttemptStage("Incorrect login.");
+            createFailLogInAttemptStage("There is no employee with such login.", "You may have been fired or rejected.");
         } else {
             if (password.equals(empl.getPassword())) {
                 //successful log in
                 onSuccessfulLogIn(empl);
             } else {
-                createFailLogInAttemptStage("Incorrect password for user " + login);
+                createFailLogInAttemptStage("Incorrect password for user " + login, "Try again!");
             }
         }
     }
 
-    private void createFailLogInAttemptStage(String info) {
+    private void createFailLogInAttemptStage(String info, String secondInfo) {
         Stage stage = new Stage();
         stage.setTitle("Fail attempt");
         Button button = new Button("Okay");
@@ -161,7 +161,7 @@ public abstract class LogInGroup extends Group {
         vBox.setSpacing(20);
         vBox.setPadding(new Insets(0, 10, 0, 10));
         vBox.getChildren().add(new Label(info));
-        vBox.getChildren().add(new Label("Try again!"));
+        vBox.getChildren().add(new Label(secondInfo));
         vBox.getChildren().add(button);
 
         stage.setScene(new Scene(vBox, 220, 120));

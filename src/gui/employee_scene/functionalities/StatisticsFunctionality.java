@@ -1,7 +1,8 @@
 package gui.employee_scene.functionalities;
 
-import business_logic.Employee;
+import business_logic.Experience;
 import business_logic.Team;
+import business_logic.Technology;
 import core.ResourcesManager;
 import gui.employee_scene.BaseFunctionality;
 import gui.employee_scene.EmployeeSceneRoot;
@@ -16,7 +17,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 
 public class StatisticsFunctionality extends BaseFunctionality {
     //================================================================================
@@ -24,12 +24,11 @@ public class StatisticsFunctionality extends BaseFunctionality {
     //================================================================================
 
     //data
-    private List<Team> teams;
-    private ArrayList<String> technologyNamesUsed;
+    private ArrayList<String> technologyNames;
 
     //ui
     private HBox mainPane;
-    private TreeView<String> technologies;
+    private TreeView<String> technologiesTree;
     private BorderPane infoPane;
 
     //================================================================================
@@ -53,10 +52,10 @@ public class StatisticsFunctionality extends BaseFunctionality {
 
         initializeData();
 
-        technologies = createTechnologiesTreeView();
+        technologiesTree = createTechnologiesTreeView();
         infoPane = createInfoPane("Company", ViewType.COMPANY);
 
-        mainPane.getChildren().add(technologies);
+        mainPane.getChildren().add(technologiesTree);
         mainPane.getChildren().add(infoPane);
 
         return mainPane;
@@ -64,15 +63,13 @@ public class StatisticsFunctionality extends BaseFunctionality {
 
     //concurrency possibility
     private void initializeData() {
-        teams = rManager.getAllTeams();
 
-        technologyNamesUsed = new ArrayList<>();
+        List<Technology> technologies = rManager.getAllTechnologies();
 
-        for (Team p : teams) {
-            String techName = p.getTechnology().getName();
-            if (!technologyNamesUsed.contains(p.getTechnology().getName())) {
-                technologyNamesUsed.add(techName);
-            }
+        technologyNames = new ArrayList<>();
+
+        for (Technology p : technologies) {
+            technologyNames.add(p.getName());
         }
     }
 
@@ -80,11 +77,11 @@ public class StatisticsFunctionality extends BaseFunctionality {
 
         TreeItem<String> mainItem = new TreeItem<>("Company");
 
-        for (String p : technologyNamesUsed) {
+        for (String p : technologyNames) {
 
             TreeItem<String> majorItem = new TreeItem<>(p);
 
-            for (Team t : teams) {
+            for (Team t : rManager.getAllTeams()) {
                 if (t.getTechnology().getName().equals(p)) {
                     TreeItem<String> minorItem = new TreeItem<>(t.getName());
                     majorItem.getChildren().add(minorItem);
@@ -98,7 +95,7 @@ public class StatisticsFunctionality extends BaseFunctionality {
 
             @Override
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                
+
                 TreeItem<String> selectedItem = (TreeItem<String>) newValue;
 
                 ViewType type;
@@ -133,31 +130,62 @@ public class StatisticsFunctionality extends BaseFunctionality {
     private GridPane createStatisticsPane(String name, ViewType type) {
         GridPane majorPane = new GridPane();
 
+        //our table
+        final short width = 6;
+        final short height = 6;
+
+        Label[][] table = new Label[width][height];
+
+        //empty
+        table[0][0] = new Label("");
+
         //column names
-        Label[] columnNames = new Label[5];
-        columnNames[0] = new Label("Managers");
-        columnNames[1] = new Label("Seniors");
-        columnNames[2] = new Label("Regulars");
-        columnNames[3] = new Label("Juniors");
-        columnNames[4] = new Label("All");
+        table[1][0] = new Label("Juniors");
+        table[2][0] = new Label("Regulars");
+        table[3][0] = new Label("Seniors");
+        table[4][0] = new Label("Managers");
+        table[5][0] = new Label("All");
 
         //row names
-        Label[] rowNames = new Label[5];
-        rowNames[0] = new Label("Size");
-        rowNames[1] = new Label("Monthly cost");
-        rowNames[2] = new Label("AVG. salary");
-        rowNames[3] = new Label("Highest salary");
-        rowNames[4] = new Label("Lowest salary");
+        table[0][1] = new Label("Size");
+        table[0][2] = new Label("Monthly cost");
+        table[0][3] = new Label("AVG. salary");
+        table[0][4] = new Label("Highest salary");
+        table[0][5] = new Label("Lowest salary");
 
-        //filled data
-        DataManager dManager;
-        switch(type) {
-            case COMPANY: dManager = new CompanyDataManager();
-            case TECHNOLOGY: dManager = new TechnologyDataManager();
-            case TEAM: dManager = new TeamDataManager();
+        //data
+        DataManager juniorDataManager = new DataManager(name, type, Experience.JUNIOR);
+        for (int i = 1; i < table[1].length; i++) {
+            table[1][i] = new Label("" + juniorDataManager.getDataRow(i - 1));
         }
-        
-        
+
+        DataManager regularDataManager = new DataManager(name, type, Experience.REGULAR);
+        for (int i = 1; i < table[2].length; i++) {
+            table[2][i] = new Label("" + regularDataManager.getDataRow(i - 1));
+        }
+
+        DataManager seniorDataManager = new DataManager(name, type, Experience.SENIOR);
+        for (int i = 1; i < table[3].length; i++) {
+            table[3][i] = new Label("" + seniorDataManager.getDataRow(i - 1));
+        }
+
+        DataManager managerDataManager = new DataManager(name, type, Experience.MANAGER);
+        for (int i = 1; i < table[4].length; i++) {
+            table[4][i] = new Label("" + managerDataManager.getDataRow(i - 1));
+        }
+
+        DataManager allDataManager = new DataManager(name, type, null);
+        for (int i = 1; i < table[5].length; i++) {
+            table[5][i] = new Label("" + allDataManager.getDataRow(i - 1));
+        }
+
+        //visualising
+        for (int i = 0; i < table.length; i++) {
+            for (int j = 0; j < table[i].length; j++) {
+                majorPane.add(table[i][j], i, j);
+            }
+        }
+
         return majorPane;
     }
 
@@ -166,171 +194,133 @@ public class StatisticsFunctionality extends BaseFunctionality {
 
         return label;
     }
-    
+
     //================================================================================
     // Accessors
     //================================================================================
     //================================================================================
     // Inner classes
-    //============================================================        return majorPane;====================
+    //================================================================================
     public enum ViewType {
 
         COMPANY,
         TECHNOLOGY,
         TEAM
     }
-    
-    public abstract class DataManager {
+
+    public class DataManager {
 
         private final String name;
-        private int[][] data;
+        private final int[] data;
         private final List<Integer> salaries;
-        
 
-        public DataManager(String name) {
+        public DataManager(String name, ViewType type, Experience experience) {
             this.name = name;
-            data = new int[5][5];
-            salaries = initializeSalariesList();
+            salaries = initializeSalariesList(type, experience);
+            data = new int[5];
+            data[0] = fillSizeRow();
+            data[1] = fillMonthlyCostRow();
+            data[2] = fillAverageSalaryRow();
+            data[3] = fillHighestSalaryRow();
+            data[4] = fillLowestSalaryRow();
         }
 
-        protected abstract List<Integer> initializeSalariesList();
-        
-        protected abstract void fillSizeRow();
+        private List<Integer> initializeSalariesList(ViewType type, Experience exp) {
+            List<Integer> temp;
 
-        protected abstract void fillMonthlyCostRow();
+            switch (type) {
+                case COMPANY:
+                    if (exp != null) {
+                        temp = rManager.getSalariesOfAllEmployees(exp);
+                    } else {
+                        temp = new ArrayList<>();
+                        temp.addAll(rManager.getSalariesOfAllEmployees(Experience.JUNIOR));
+                        temp.addAll(rManager.getSalariesOfAllEmployees(Experience.REGULAR));
+                        temp.addAll(rManager.getSalariesOfAllEmployees(Experience.SENIOR));
+                        temp.addAll(rManager.getSalariesOfAllEmployees(Experience.MANAGER));
+                    }
+                    break;
+                case TECHNOLOGY:
+                    if (exp != null) {
+                        temp = rManager.getSalariesOfTechnologyMembers(rManager.getTechnologyID(name), exp);
+                    } else {
+                        temp = new ArrayList<>();
+                        temp.addAll(rManager.getSalariesOfTechnologyMembers(rManager.getTechnologyID(name), Experience.JUNIOR));
+                        temp.addAll(rManager.getSalariesOfTechnologyMembers(rManager.getTechnologyID(name), Experience.REGULAR));
+                        temp.addAll(rManager.getSalariesOfTechnologyMembers(rManager.getTechnologyID(name), Experience.SENIOR));
+                        temp.addAll(rManager.getSalariesOfTechnologyMembers(rManager.getTechnologyID(name), Experience.MANAGER));
+                    }
+                    break;
+                case TEAM:
+                    if (exp != null) {
+                        temp = rManager.getSalariesOfTeamMembers(rManager.getTeamID(name), exp);
+                    } else {
+                        temp = new ArrayList<>();
+                        temp.addAll(rManager.getSalariesOfTeamMembers(rManager.getTeamID(name), Experience.JUNIOR));
+                        temp.addAll(rManager.getSalariesOfTeamMembers(rManager.getTeamID(name), Experience.REGULAR));
+                        temp.addAll(rManager.getSalariesOfTeamMembers(rManager.getTeamID(name), Experience.SENIOR));
+                        temp.addAll(rManager.getSalariesOfTeamMembers(rManager.getTeamID(name), Experience.MANAGER));
+                    }
+                    break;
+                default:
+                    throw new IllegalArgumentException() {
+                        @Override
+                        public String getMessage() {
+                            return "Invalid type passed.";
+                        }
+                    };
+            }
 
-        protected abstract void fillAverageSalaryRow();
-
-        protected abstract void fillHighestSalaryRow();
-
-        protected abstract void fillLowestSalaryRow();
-
-        public int[][] getData() {
-            return data;
+            return temp;
         }
 
-    }
-
-    public final class CompanyDataManager extends DataManager {
-
-        public CompanyDataManager(String name) {
-            super(name);
-        }
-        
-        @Override
-        protected List<Integer> initializeSalariesList() {
-            List<Integer> salaries = rManager.getSalariesOfAllEmployees();
-            
-            return salaries;
-        }
-        
-        @Override
-        protected void fillSizeRow() {
-            
+        private int fillSizeRow() {
+            return salaries.size();
         }
 
-        @Override
-        protected void fillMonthlyCostRow() {
+        private int fillMonthlyCostRow() {
+            int temp = 0;
 
+            for (Integer p : salaries) {
+                temp += p;
+            }
+
+            return temp;
         }
 
-        @Override
-        protected void fillAverageSalaryRow() {
+        private int fillAverageSalaryRow() {
+            float temp = 0.0f;
 
+            for (Integer p : salaries) {
+                temp += p;
+            }
+
+            return Math.round(temp / (float) salaries.size());
         }
 
-        @Override
-        protected void fillHighestSalaryRow() {
+        private int fillHighestSalaryRow() {
+            int temp = 0;
 
+            for (Integer p : salaries) {
+                temp = Math.max(temp, p);
+            }
+
+            return temp;
         }
 
-        @Override
-        protected void fillLowestSalaryRow() {
+        private int fillLowestSalaryRow() {
+            int temp = salaries.isEmpty() ? 0 : salaries.get(0);
 
+            for (Integer p : salaries) {
+                temp = Math.min(temp, p);
+            }
+
+            return temp;
         }
 
-        
-
-    }
-
-    public final class TechnologyDataManager extends DataManager {
-
-        public TechnologyDataManager(String name) {
-            super(name);
-        }
-        
-        @Override
-        protected List<Integer> initializeSalariesList() {
-            List<Integer> salaries = rManager.getSalariesOfTechnologyMembers(technology_id);
-            
-            return salaries;
-        }
-        
-
-        @Override
-        protected void fillSizeRow() {
-
+        private int getDataRow(int index) {
+            return data[index];
         }
 
-        @Override
-        protected void fillMonthlyCostRow() {
-
-        }
-
-        @Override
-        protected void fillAverageSalaryRow() {
-
-        }
-
-        @Override
-        protected void fillHighestSalaryRow() {
-
-        }
-
-        @Override
-        protected void fillLowestSalaryRow() {
-
-        }
-
-    }
-
-    public final class TeamDataManager extends DataManager {
-
-        public TeamDataManager(String name) {
-            super(name);
-        }
-
-        @Override
-        protected List<Integer> initializeSalariesList() {
-            List<Integer> salaries = rManager.getSalariesOfTeamMembers(team_id);
-            
-            return salaries;
-        }
-
-        
-        @Override
-        protected void fillSizeRow() {
-
-        }
-
-        @Override
-        protected void fillMonthlyCostRow() {
-
-        }
-
-        @Override
-        protected void fillAverageSalaryRow() {
-
-        }
-
-        @Override
-        protected void fillHighestSalaryRow() {
-
-        }
-
-        @Override
-        protected void fillLowestSalaryRow() {
-
-        }
     }
 }

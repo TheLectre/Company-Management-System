@@ -61,7 +61,7 @@ public class AppView extends Application {
     }
 
     private void initializeEmployeeScene(Employee employee) {
-        employeeScene = new Scene(new EmployeeSceneRoot(rManager, employee), 500, 400);
+        employeeScene = new Scene(new EmployeeSceneRoot(rManager, employee), 700, 500);
     }
 
     private void initializeConnectScene() {
@@ -71,7 +71,7 @@ public class AppView extends Application {
             public void logIn(Employee employee) {
                 toEmployeeScene(employee);
             }
-        }, 500, 400);
+        }, 700, 500);
         primaryStage.setScene(connectScene);
     }
 

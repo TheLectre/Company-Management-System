@@ -74,9 +74,17 @@ public class Employee {
         
         convertExperience(experience);
     }
-    
-    //teamview assigning employee to team
-    
+
+    //get_one
+    public Employee(int id, String firstName, String lastName, String experience, int salary, Technology technology) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.salary = salary;
+        this.technology = technology;
+        
+        convertExperience(experience);
+    }
     
     
     
