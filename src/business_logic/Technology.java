@@ -30,6 +30,18 @@ public class Technology {
         return "name";
     }
     
+    @Override
+    public boolean equals(Object obj) {
+        Technology temp;
+        try {
+            temp = (Technology)obj;
+        }
+        catch(Exception e) {
+            return false;
+        }
+        return this.getName().equals(temp.getName());
+    }
+    
     //================================================================================
     // Accessors
     //================================================================================
