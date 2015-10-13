@@ -297,7 +297,7 @@ public class TeamViewFunctionality extends BaseFunctionality {
 
             @Override
             public void handle(ActionEvent event) {
-                //counting remove wishes
+                //counting remove requests
                 ArrayList<Integer> removeCandidatesIDs = new ArrayList<>();
                 for(EmployeeDisplay p : viewedEmployeeData) {
                     if(p.isSelected()) {
@@ -312,9 +312,9 @@ public class TeamViewFunctionality extends BaseFunctionality {
                 //ui
                 Stage removeEmployeesStage = new Stage();
                 VBox majorBox = new VBox();
-                Label infoLabel = new Label("You chose " +  (removeCandidatesIDs.isEmpty() ? "no" : removeCandidatesIDs.size()) + " employees to remove.");
+                Label infoLabel = new Label("Choose action for " +  (removeCandidatesIDs.isEmpty() ? "no" : removeCandidatesIDs.size()) + "employees");
                 majorBox.getChildren().add(infoLabel);
-                Label secondInfoLabel = new Label((removeCandidatesIDs.isEmpty() ? "Select employees first" : "Are you sure?"));
+                Label secondInfoLabel = new Label((removeCandidatesIDs.isEmpty() ? "Select employees first" : "Action cannot be reverted"));
                 majorBox.getChildren().add(secondInfoLabel);
                 if(removeCandidatesIDs.isEmpty()) {
                     Button okButton = new Button("OK");
@@ -343,6 +343,20 @@ public class TeamViewFunctionality extends BaseFunctionality {
                         }
                     });
                     
+                    Button fireButton = new Button("Fire");
+                    fireButton.setOnAction(new EventHandler<ActionEvent>() {
+
+                        @Override
+                        public void handle(ActionEvent event) {
+                            for(Integer p : removeCandidatesIDs) {
+                                rManager.removeEmployee(p);
+                            }
+                            
+                            removeEmployeesStage.close();
+                            refreshTeamTable(team_id);
+                        }
+                    });
+                    
                     Button cancelButton = new Button("Cancel");
                     cancelButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -352,13 +366,13 @@ public class TeamViewFunctionality extends BaseFunctionality {
                         }
                     });
                     
-                    buttonBox.getChildren().addAll(removeButton, cancelButton);
+                    buttonBox.getChildren().addAll(removeButton, fireButton, cancelButton);
                     majorBox.getChildren().add(buttonBox);
                 }
                 
                 
                 
-                removeEmployeesStage.setTitle("Removing employees");
+                removeEmployeesStage.setTitle("Choose action");
                 removeEmployeesStage.setScene(new Scene(majorBox, 250, 150));
                 removeEmployeesStage.show();
             }
