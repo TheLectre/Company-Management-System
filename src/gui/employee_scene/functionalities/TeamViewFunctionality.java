@@ -119,6 +119,9 @@ public class TeamViewFunctionality extends BaseFunctionality {
 
         List<Team> teams = rManager.getAllTeams();
 
+        //Show All option; not the pretties way, though
+        comboBox.getItems().add(new Team("All", null);
+
         for (Team p : teams) {
             comboBox.getItems().add(p);
         }
@@ -183,6 +186,21 @@ public class TeamViewFunctionality extends BaseFunctionality {
         
         teamTable.setItems(viewedEmployeeData);
     }
+    
+    //for All
+    private void refreshTeamTableForAll() {
+        //data
+        List<Employee> employeesList = rManager.getAllAcceptedEmployees();
+
+        viewedEmployeeData = FXCollections.observableArrayList();
+
+        int index = 0;
+        for (Employee p : employeesList) {
+            viewedEmployeeData.add(new EmployeeDisplay(p.getID(), ++index, p.getFirstName(), p.getLastName(), p.getExperience().toString()));
+        }
+        
+        teamTable.setItems(employeesList);
+    }
 
     private void refreshAdminView() {
         teamNameNode = createTeamNameComboBox();
@@ -190,7 +208,16 @@ public class TeamViewFunctionality extends BaseFunctionality {
         mainPane.getChildren().remove(0);
         mainPane.getChildren().add(0, teamNameNode);
         
-        refreshTeamTable(((ComboBox<Team>)teamNameNode).getValue().getID());
+        //safe downcasting
+        ComboBox comboBox = (ComboBox<Team>)teamNameNode;
+        
+        if(comboBox.getValue().getName().equals("All")) {
+            refreshTeamTableForAll();
+        }
+        else {
+            refreshTeamTable(comboBoxgetValue().getID());
+        }
+        
     }
     
     private Button createAddEmployeeButton() {
