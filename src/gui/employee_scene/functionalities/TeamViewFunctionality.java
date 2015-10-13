@@ -437,6 +437,9 @@ public class TeamViewFunctionality extends BaseFunctionality {
                         if(teamNameField.getText().length() > 20 || teamNameField.getText().length() < 3) {
                             errorLabel.setText("Invalid team name length <3-20> characters");
                         }
+                        else if(teamNameField.getText().equals("All") {
+                            errorLabel.setText("Invalid team name." + " Name all is forbidden.");
+                        }
                         else if(rManager.getTeamID(teamNameField.getText()) != 0) {
                             errorLabel.setText("Team name already in use");
                         }
