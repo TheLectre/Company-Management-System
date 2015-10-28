@@ -4,6 +4,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 
 
 public class Footer extends HBox {
@@ -29,7 +33,12 @@ public class Footer extends HBox {
 	
     private void initiateLabels() {
         creator = new Label("Lectre");
+        creator.setTextFill(Color.BROWN);
+        creator.setFont(Font.font(null, FontWeight.BOLD, FontPosture.ITALIC, 18));
+        
         year = new Label("2015");
+        year.setTextFill(Color.BROWN);
+        year.setFont(Font.font(null, FontWeight.BOLD, FontPosture.ITALIC, 18));
     }
     
     private void initiateThis() {

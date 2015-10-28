@@ -6,6 +6,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 
 public abstract class ConnectSceneHead extends HBox {
@@ -24,8 +26,8 @@ public abstract class ConnectSceneHead extends HBox {
         initiateLogInButton();
         initiateApplyButton();
         
-        this.setPadding(new Insets(15, 12, 15, 12));
-        this.setSpacing(10);
+        this.setPadding(new Insets(40, 40, 40, 40));
+        this.setSpacing(40);
         this.setAlignment(Pos.CENTER);
     }
 
@@ -39,6 +41,7 @@ public abstract class ConnectSceneHead extends HBox {
     
     private void initiateLogInButton() {
         logInButton = new Button("Log in");
+        logInButton.setFont(Font.font(null, FontWeight.BOLD, 18));
         
         logInButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -47,12 +50,12 @@ public abstract class ConnectSceneHead extends HBox {
             }
         });
         
-        logInButton.setPrefSize(100, 25);
         this.getChildren().add(logInButton);
     }
     
     private void initiateApplyButton() {
         applyButton = new Button("Apply");
+        applyButton.setFont(Font.font(null, FontWeight.BOLD, 18));
         
         applyButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override

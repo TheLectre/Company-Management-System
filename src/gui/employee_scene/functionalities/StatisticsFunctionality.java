@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -17,6 +19,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 
 public class StatisticsFunctionality extends BaseFunctionality {
     //================================================================================
@@ -50,6 +55,9 @@ public class StatisticsFunctionality extends BaseFunctionality {
     public Pane loadContent() {
         mainPane = new HBox();
 
+        mainPane.setPadding(new Insets(15, 15, 15, 15));
+        mainPane.setSpacing(15);
+        
         initializeData();
 
         technologiesTree = createTechnologiesTreeView();
@@ -91,6 +99,7 @@ public class StatisticsFunctionality extends BaseFunctionality {
         }
 
         TreeView<String> mainTree = new TreeView<>(mainItem);
+        mainTree.setMaxWidth(180);
         mainTree.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
 
             @Override
@@ -120,7 +129,6 @@ public class StatisticsFunctionality extends BaseFunctionality {
 
     private BorderPane createInfoPane(String name, ViewType type) {
         BorderPane bPane = new BorderPane();
-
         bPane.setTop(createHeaderLabel(name));
         bPane.setCenter(createStatisticsPane(name, type));
 
@@ -130,6 +138,12 @@ public class StatisticsFunctionality extends BaseFunctionality {
     private GridPane createStatisticsPane(String name, ViewType type) {
         GridPane majorPane = new GridPane();
 
+        majorPane.setAlignment(Pos.CENTER);
+        
+        majorPane.setHgap(7);
+        majorPane.setVgap(9);
+        
+        
         //our table
         final short width = 6;
         final short height = 6;
@@ -146,6 +160,10 @@ public class StatisticsFunctionality extends BaseFunctionality {
         table[4][0] = new Label("Managers");
         table[5][0] = new Label("All");
 
+        for(int i=0;i<width;i++) {
+            table[i][0].setFont(Font.font(null, FontWeight.BOLD, 12));
+        }
+        
         //row names
         table[0][1] = new Label("Size");
         table[0][2] = new Label("Monthly cost");
@@ -153,6 +171,10 @@ public class StatisticsFunctionality extends BaseFunctionality {
         table[0][4] = new Label("Highest salary");
         table[0][5] = new Label("Lowest salary");
 
+        for(int i=0;i<width;i++) {
+            table[0][i].setFont(Font.font(null, FontWeight.BOLD, 12));
+        }
+        
         //data
         DataManager juniorDataManager = new DataManager(name, type, Experience.JUNIOR);
         for (int i = 1; i < table[1].length; i++) {
@@ -191,7 +213,7 @@ public class StatisticsFunctionality extends BaseFunctionality {
 
     private Label createHeaderLabel(String name) {
         Label label = new Label(name);
-
+        label.setFont(Font.font(null, FontWeight.BOLD, 16));
         return label;
     }
 
@@ -211,13 +233,13 @@ public class StatisticsFunctionality extends BaseFunctionality {
     public class DataManager {
 
         private final String name;
-        private final int[] data;
+        private final String[] data;
         private final List<Integer> salaries;
 
         public DataManager(String name, ViewType type, Experience experience) {
             this.name = name;
             salaries = initializeSalariesList(type, experience);
-            data = new int[5];
+            data = new String[5];
             data[0] = fillSizeRow();
             data[1] = fillMonthlyCostRow();
             data[2] = fillAverageSalaryRow();
@@ -274,51 +296,51 @@ public class StatisticsFunctionality extends BaseFunctionality {
             return temp;
         }
 
-        private int fillSizeRow() {
-            return salaries.size();
+        private String fillSizeRow() {
+            return "" + salaries.size();
         }
 
-        private int fillMonthlyCostRow() {
+        private String fillMonthlyCostRow() {
             int temp = 0;
 
             for (Integer p : salaries) {
                 temp += p;
             }
 
-            return temp;
+            return "" + temp + "‎€";
         }
 
-        private int fillAverageSalaryRow() {
+        private String fillAverageSalaryRow() {
             float temp = 0.0f;
 
             for (Integer p : salaries) {
                 temp += p;
             }
 
-            return Math.round(temp / (float) salaries.size());
+            return "" + Math.round(temp / (float) salaries.size()) + "‎€";
         }
 
-        private int fillHighestSalaryRow() {
+        private String fillHighestSalaryRow() {
             int temp = 0;
 
             for (Integer p : salaries) {
                 temp = Math.max(temp, p);
             }
 
-            return temp;
+            return "" + temp + "‎€";
         }
 
-        private int fillLowestSalaryRow() {
+        private String fillLowestSalaryRow() {
             int temp = salaries.isEmpty() ? 0 : salaries.get(0);
 
             for (Integer p : salaries) {
                 temp = Math.min(temp, p);
             }
 
-            return temp;
+            return "" + temp + "‎€";
         }
 
-        private int getDataRow(int index) {
+        private String getDataRow(int index) {
             return data[index];
         }
 

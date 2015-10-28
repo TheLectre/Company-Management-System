@@ -48,8 +48,8 @@ public abstract class LogInGroup extends Group {
     //================================================================================
     private void initializeGridPane() {
         gridPane = new GridPane();
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
+        gridPane.setHgap(30);
+        gridPane.setVgap(40);
         gridPane.setPadding(new Insets(0, 10, 0, 10));
         this.getChildren().add(gridPane);
 

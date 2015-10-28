@@ -4,15 +4,18 @@ import business_logic.Employee;
 import core.ResourcesManager;
 import gui.employee_scene.BaseFunctionality;
 import gui.employee_scene.EmployeeSceneRoot;
-import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 
 
 public class AppliesFunctionality extends BaseFunctionality {
@@ -20,9 +23,6 @@ public class AppliesFunctionality extends BaseFunctionality {
     //================================================================================
     // Fields
     //================================================================================
-
-    //data
-    //consider switching it to LinkedList
     
     //UI
     private VBox mainPane;
@@ -55,18 +55,21 @@ public class AppliesFunctionality extends BaseFunctionality {
     
     private VBox createMainPane() {
         VBox pane = new VBox();
-        
+        pane.setAlignment(Pos.CENTER);
+        pane.setSpacing(20);
         return pane;
     }
     
     private Label createNoAppliesLabel() {
         Label label = new Label("There are no applies at the moment.");
-        
+        label.setFont(Font.font(null, FontWeight.BOLD, 16));
         return label;
     }
 
     private VBox createApplyManagementPane(Employee employee) {
         VBox applyManagementPane = new VBox();
+        applyManagementPane.setAlignment(Pos.CENTER);
+        applyManagementPane.setSpacing(20);
         
         applyManagementPane.getChildren().add(createAppliesLeftLabel());
         applyManagementPane.getChildren().add(createApplyView(employee));
@@ -77,13 +80,19 @@ public class AppliesFunctionality extends BaseFunctionality {
     
     private HBox createApplyView(Employee employee) {
         HBox majorBox = new HBox();
+        majorBox.setAlignment(Pos.CENTER);
+        majorBox.setSpacing(20);
         
         VBox minorRowNamesPane = new VBox();
+        minorRowNamesPane.setAlignment(Pos.CENTER);
+        minorRowNamesPane.setSpacing(20);
         for(Label p : createRowNames()) {
             minorRowNamesPane.getChildren().add(p);
         }
         
         VBox minorEmployeeInfoPane = new VBox();
+        minorEmployeeInfoPane.setAlignment(Pos.CENTER);
+        minorEmployeeInfoPane.setSpacing(20);
         for(Label p : createEmployeeInfoLabels(employee)) {
             minorEmployeeInfoPane.getChildren().add(p);
         }
@@ -95,6 +104,8 @@ public class AppliesFunctionality extends BaseFunctionality {
    
     private HBox createApplyButtons(Employee employee) {
         HBox buttons = new HBox();
+        buttons.setAlignment(Pos.CENTER);
+        buttons.setSpacing(20);
         
         Button acceptButton = new Button("Accept");
         acceptButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -123,7 +134,7 @@ public class AppliesFunctionality extends BaseFunctionality {
     
     private Label createAppliesLeftLabel() {
         Label label = new Label("Job applies left: " + rManager.getNumberOfApplies());
-        
+        label.setFont(Font.font(null, FontPosture.ITALIC, 14));
         return label;
     }
     
@@ -135,6 +146,10 @@ public class AppliesFunctionality extends BaseFunctionality {
         labels[2] = new Label("Technology:");
         labels[3] = new Label("Experience");
         labels[4] = new Label("Preferred salary");
+        
+        for(int i=0;i<labels.length;i++) {
+            labels[i].setFont(Font.font(null, FontWeight.BOLD, 14));
+        }
         
         return labels;
     }
@@ -148,7 +163,11 @@ public class AppliesFunctionality extends BaseFunctionality {
         labels[1] = new Label(empl.getLastName());
         labels[2] = new Label(empl.getTechnology().getName());
         labels[3] = new Label(empl.getExperience().toString());
-        labels[4] = new Label("" + empl.getSalary());
+        labels[4] = new Label("" + empl.getSalary() + "€");
+        
+        for(int i=0;i<labels.length;i++) {
+            labels[i].setFont(Font.font(null, FontWeight.NORMAL, 14));
+        }
         
         return labels;
     }

@@ -39,6 +39,37 @@ public class ChangePasswordFunctionality extends BaseFunctionality {
     //================================================================================
     // Methods
     //================================================================================
+        @Override
+    public String name() {
+        return "Change password";
+    }
+
+    @Override
+    public Pane loadContent() {
+
+        initializeComponents();
+
+        GridPane pane = new GridPane();
+        
+        pane.setHgap(40);
+        pane.setVgap(40);
+        
+        pane.setAlignment(Pos.CENTER);
+
+        pane.add(labels[0], 0, 0);
+        pane.add(labels[1], 0, 1);
+        pane.add(labels[2], 0, 2);
+
+        pane.add(passwordFields[0], 1, 0);
+        pane.add(passwordFields[1], 1, 1);
+        pane.add(passwordFields[2], 1, 2);
+
+        pane.add(submitButton, 1, 3);
+        pane.add(warningLabel, 1, 4);
+
+        return pane;
+    }
+    
     private void initializeComponents() {
         labels = new Label[3];
         passwordFields = new PasswordField[3];
@@ -138,33 +169,7 @@ public class ChangePasswordFunctionality extends BaseFunctionality {
         successfulPaswordChangeStage.show();
     }
 
-    @Override
-    public String name() {
-        return "Change password";
-    }
 
-    @Override
-    public Pane loadContent() {
-
-        initializeComponents();
-
-        GridPane pane = new GridPane();
-
-        pane.setAlignment(Pos.CENTER);
-
-        pane.add(labels[0], 0, 0);
-        pane.add(labels[1], 0, 1);
-        pane.add(labels[2], 0, 2);
-
-        pane.add(passwordFields[0], 1, 0);
-        pane.add(passwordFields[1], 1, 1);
-        pane.add(passwordFields[2], 1, 2);
-
-        pane.add(submitButton, 1, 3);
-        pane.add(warningLabel, 1, 4);
-
-        return pane;
-    }
 
     //================================================================================
     // Accessors

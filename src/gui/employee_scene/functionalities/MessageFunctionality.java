@@ -37,6 +37,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class MessageFunctionality extends BaseFunctionality {
@@ -89,7 +91,7 @@ public class MessageFunctionality extends BaseFunctionality {
     @Override
     public Pane loadContent() {
         mainPane = new BorderPane();
-
+        
         initializeHead();
         loadReceivingMode();
 
@@ -102,6 +104,9 @@ public class MessageFunctionality extends BaseFunctionality {
     private void initializeHead() {
         head = new HBox();
 
+        head.setPadding(new Insets(10, 10, 10, 10));
+        head.setSpacing(20);
+        
         head.setAlignment(Pos.CENTER);
 
         Button newMessage = new Button("New Message");
@@ -131,6 +136,7 @@ public class MessageFunctionality extends BaseFunctionality {
 
     private void loadSendingMode() {
         sending = new VBox();
+        sending.setSpacing(15);
         sending.setAlignment(Pos.CENTER);
 
         addressee = createAddressee();
@@ -151,8 +157,11 @@ public class MessageFunctionality extends BaseFunctionality {
     private void loadReceivingMode() {
         receiving = new VBox();
 
+        receiving.setPadding(new Insets(0, 10, 10, 10));
+        
         messageList = createMessageList();
 
+        
         receiving.getChildren().add(messageList);
     }
 
@@ -176,6 +185,7 @@ public class MessageFunctionality extends BaseFunctionality {
     private ComboBox<String> createMessageType() {
         ComboBox<String> type = new ComboBox<>();
         type.setPromptText("Message type");
+        type.setMaxWidth(200);
 
         type.getItems().add(MessageType.EMPLOYEE.toString());
         type.getItems().add(MessageType.TEAM.toString());
@@ -259,6 +269,7 @@ public class MessageFunctionality extends BaseFunctionality {
     private AutoCompleteTextField createAddressee() {
         AutoCompleteTextField addressee = new AutoCompleteTextField();
         addressee.setDisable(true);
+        addressee.setFont(Font.font(null, FontWeight.SEMI_BOLD, 16));
         addressee.setMaxWidth(200);
         addressee.setPromptText("Name");
 
@@ -302,7 +313,9 @@ public class MessageFunctionality extends BaseFunctionality {
     private TextField createTopic() {
         TextField topic = new TextField();
         topic.setDisable(true);
+        topic.setFont(Font.font(null, FontWeight.SEMI_BOLD, 16));
         topic.setPromptText("Topic");
+        topic.setMaxWidth(200);
 
         return topic;
     }
@@ -311,7 +324,7 @@ public class MessageFunctionality extends BaseFunctionality {
         //table and columns
         TableView<MessageDisplay> tableView = new TableView<>();
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
+        
         tableView.setCursor(Cursor.HAND);
         tableView.setEditable(false);
 
@@ -432,12 +445,17 @@ public class MessageFunctionality extends BaseFunctionality {
             }
         });
 
+        Label info = new Label(information);
+        info.setFont(Font.font(null, FontWeight.SEMI_BOLD, 14));
+        Label secondInfo = new Label(secondInformation);
+        secondInfo.setFont(Font.font(null, FontWeight.BOLD, 16));
+        
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(20);
         vBox.setPadding(new Insets(0, 10, 0, 10));
-        vBox.getChildren().add(new Label(information));
-        vBox.getChildren().add(new Label(secondInformation));
+        vBox.getChildren().add(info);
+        vBox.getChildren().add(secondInfo);
         vBox.getChildren().add(okButton);
 
         resultStage.setScene(new Scene(vBox, 280, 150));

@@ -1,14 +1,14 @@
 package gui.employee_scene;
 
 import business_logic.Employee;
+import business_logic.Experience;
 import core.ResourcesManager;
 import gui.employee_scene.functionalities.AdminPromotionFunctionality;
 import gui.employee_scene.functionalities.AppliesFunctionality;
 import gui.employee_scene.functionalities.ChangePasswordFunctionality;
 import gui.employee_scene.functionalities.EmployeePromotionFunctionality;
-import gui.employee_scene.functionalities.EmployeesFunctionality;
 import gui.employee_scene.functionalities.MessageFunctionality;
-import gui.employee_scene.functionalities.TeamViewFunctionality;
+import gui.employee_scene.functionalities.EmployeesFunctionality;
 import gui.employee_scene.functionalities.StatisticsFunctionality;
 import gui.employee_scene.functionalities.TechnologiesFunctioanlity;
 import java.util.ArrayList;
@@ -57,15 +57,22 @@ public class EmployeeSceneRoot extends BorderPane {
     
     private void initiateFunctionalities() {
         functionalities = new ArrayList<>();
-        functionalities.add(new ChangePasswordFunctionality(this, rManager));
-        functionalities.add(new EmployeePromotionFunctionality(this, rManager));
-        functionalities.add(new AdminPromotionFunctionality(this, rManager));
-        functionalities.add(new MessageFunctionality(this, rManager));
-        functionalities.add(new TeamViewFunctionality(this, rManager));
-        functionalities.add(new StatisticsFunctionality(this, rManager));
-        functionalities.add(new AppliesFunctionality(this, rManager));
-        functionalities.add(new TechnologiesFunctioanlity(this, rManager));
-        functionalities.add(new EmployeesFunctionality(this, rManager));
+        // loading admin's menu
+        if(employee.getExperience().equals(Experience.ADMINISTRATOR)) {
+            functionalities.add(new EmployeesFunctionality(this, rManager));
+            functionalities.add(new AppliesFunctionality(this, rManager));
+            functionalities.add(new AdminPromotionFunctionality(this, rManager));
+            functionalities.add(new MessageFunctionality(this, rManager));
+            functionalities.add(new TechnologiesFunctioanlity(this, rManager));
+            functionalities.add(new StatisticsFunctionality(this, rManager));
+            functionalities.add(new ChangePasswordFunctionality(this, rManager));
+        }
+        else {
+            functionalities.add(new EmployeesFunctionality(this, rManager));
+            functionalities.add(new EmployeePromotionFunctionality(this, rManager));
+            functionalities.add(new MessageFunctionality(this, rManager));
+            functionalities.add(new ChangePasswordFunctionality(this, rManager));
+        }
     }
     
     private void initiateInfoPanel() {

@@ -20,6 +20,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 
@@ -91,6 +93,7 @@ public abstract class ApplyGroup extends Group {
         }
         
         warningLabel = new Label();
+        warningLabel.setTextFill(Color.RED);
         warningLabel.setVisible(false);
     }
     

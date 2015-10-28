@@ -13,6 +13,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -24,6 +26,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 
 public class TechnologiesFunctioanlity extends BaseFunctionality {
 
@@ -72,8 +77,11 @@ public class TechnologiesFunctioanlity extends BaseFunctionality {
 
     private VBox createTablePane() {
         VBox vBox = new VBox();
+        vBox.setSpacing(15);
+        vBox.setAlignment(Pos.TOP_CENTER);
 
         Label titleLabel = new Label("List");
+        titleLabel.setFont(Font.font(null, FontWeight.BOLD, 16));
 
         vBox.getChildren().add(titleLabel);
         vBox.getChildren().add(technologiesTable);
@@ -106,7 +114,7 @@ public class TechnologiesFunctioanlity extends BaseFunctionality {
 
         //clearing unusedTechnologies
         unusedTechnologies.clear();
-        
+
         for (Technology p : rManager.getAllTechnologies()) {
 
             int numberOfTeams = 0;
@@ -141,11 +149,14 @@ public class TechnologiesFunctioanlity extends BaseFunctionality {
         removeTechnologyPane = createRemoveTechnologyPane();
         mainPane.getChildren().add(removeTechnologyPane);
     }
-    
+
     private VBox createAddTechnologyPane() {
         VBox pane = new VBox();
-
+        pane.setSpacing(15);
+        pane.setAlignment(Pos.TOP_CENTER);
+        
         Label titleLabel = new Label("Add");
+        titleLabel.setFont(Font.font(null, FontWeight.BOLD, 16));
 
         TextField nameField = new TextField();
         nameField.setPromptText("Technology name");
@@ -159,7 +170,8 @@ public class TechnologiesFunctioanlity extends BaseFunctionality {
             public void handle(ActionEvent event) {
 
                 String name = nameField.getText();
-
+                nameField.setText("");
+                
                 if (rManager.getTechnologyID(name) != 0) {
                     errorLabel.setText(name + " is added already");
                 } else if (name.length() > 20) {
@@ -180,8 +192,11 @@ public class TechnologiesFunctioanlity extends BaseFunctionality {
 
     private VBox createRemoveTechnologyPane() {
         VBox majorpane = new VBox();
-
+        majorpane.setSpacing(15);
+        majorpane.setAlignment(Pos.TOP_CENTER);
+        
         Label titleLabel = new Label("Remove");
+        titleLabel.setFont(Font.font(null, FontWeight.BOLD, 16));
 
         Label warningLabel = new Label("You can only remove\n not used technologies");
 
@@ -204,11 +219,11 @@ public class TechnologiesFunctioanlity extends BaseFunctionality {
                     }
                 }
             });
-            
+
             Label nameLabel = new Label(p.getName());
-            
+
             hBox.getChildren().addAll(checkBox, nameLabel);
-            
+
             minorPane.getChildren().add(hBox);
         }
 
@@ -222,14 +237,14 @@ public class TechnologiesFunctioanlity extends BaseFunctionality {
 
             @Override
             public void handle(ActionEvent event) {
-                for(Integer p : checkedTechnologyIDs) {
+                for (Integer p : checkedTechnologyIDs) {
                     rManager.removeTechnology(p);
                     refreshTechnologyTable();
                     refreshRemoveTechnologyPane();
                 }
             }
         });
-        
+
         majorpane.getChildren().addAll(titleLabel, warningLabel, scrollPane, submitButton);
 
         return majorpane;
@@ -237,7 +252,10 @@ public class TechnologiesFunctioanlity extends BaseFunctionality {
 
     private HBox createMainPane() {
         HBox pane = new HBox();
-
+        pane.setAlignment(Pos.CENTER);
+        pane.setPadding(new Insets(15, 15, 15, 15));
+        pane.setSpacing(15);
+        
         return pane;
     }
     //================================================================================

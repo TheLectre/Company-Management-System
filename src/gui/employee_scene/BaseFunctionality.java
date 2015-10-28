@@ -5,6 +5,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 
 public abstract class BaseFunctionality {
@@ -36,6 +38,7 @@ public abstract class BaseFunctionality {
     
     private void initializeButton() {
         button = new ToggleButton(name());
+        button.setFont(Font.font(null, FontWeight.MEDIUM, 14));
         
         button.setOnAction(new EventHandler<ActionEvent>() {
             

@@ -17,6 +17,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 
 public class AdminPromotionFunctionality extends BaseFunctionality {
 
@@ -57,6 +60,8 @@ public class AdminPromotionFunctionality extends BaseFunctionality {
     public Pane loadContent() {
         mainPane = new VBox();
         mainPane.setAlignment(Pos.CENTER);
+        
+        mainPane.setSpacing(10);
 
         promotions = rManager.getAllPromotions();
         promotionsIterator = promotions.iterator();
@@ -99,6 +104,7 @@ public class AdminPromotionFunctionality extends BaseFunctionality {
         mainPane.getChildren().clear();
 
         Label info = new Label("There are no requests at the moment.");
+        info.setFont(Font.font(null, FontWeight.BOLD, 16));
 
         mainPane.getChildren().add(info);
     }
@@ -155,13 +161,13 @@ public class AdminPromotionFunctionality extends BaseFunctionality {
 
         //specific promotion informations
         Label currentSalary = new Label("" + currentEmployee.getSalary());
+        currentSalary.setFont(Font.font(null, FontWeight.BOLD, 14));
         Label freshSalary = new Label("" + currentPromotion.getNewSalary());
+        freshSalary.setFont(Font.font(null, FontWeight.BOLD, 14));
         Label currentPosition = new Label(currentEmployee.getExperience().toString());
+        currentPosition.setFont(Font.font(null, FontWeight.BOLD, 14));
         Label freshPosition;
-
-        if (currentEmployee.getSalary() == currentPromotion.getNewSalary()) {
-            //salary is not updated
-        }
+        
 
         if (currentPromotion.getNewExperience() == null) {
             //position is not updated
@@ -170,6 +176,8 @@ public class AdminPromotionFunctionality extends BaseFunctionality {
             //position is updated
             freshPosition = new Label(currentPromotion.getNewExperience().toString());
         }
+        
+        freshPosition.setFont(Font.font(null, FontWeight.BOLD, 14));
 
         //adding components to pane
         requestView.add(columnNames[0], 0, 2);
@@ -190,11 +198,14 @@ public class AdminPromotionFunctionality extends BaseFunctionality {
 
     private void initializeRequestView() {
         requestView = new GridPane();
+        requestView.setVgap(10);
+        requestView.setHgap(10);
         requestView.setAlignment(Pos.CENTER);
     }
 
     private void initializeDecisionButtons() {
         decisionButtons = new HBox();
+        decisionButtons.setSpacing(30);
         decisionButtons.setAlignment(Pos.CENTER);
 
         Button acceptButton = createAcceptRequestButton();
@@ -206,18 +217,22 @@ public class AdminPromotionFunctionality extends BaseFunctionality {
 
     private void initializeEmployeeNameLabel() {
         employeeName = new Label(currentEmployee.getFirstName() + " " + currentEmployee.getLastName());
+        employeeName.setFont(Font.font(null, FontWeight.BOLD, 18));
     }
 
     private void initializeEmployeeNameSticker() {
         employeeNamesticker = new Label("asks for advancement");
+        employeeNamesticker.setFont(Font.font(null, FontPosture.ITALIC, 14));
     }
     
     private void initializeMessageSticker() {
         messageSticker = new Label("included message");
+        messageSticker.setFont(Font.font(null, FontPosture.ITALIC, 14));
     }
 
     private void initializeRequestsLeftLabel() {
         requestsLeft = new Label();
+        requestsLeft.setFont(Font.font(null, FontPosture.ITALIC, 14));
         refreshRequestsLeftNumber();
     }
 
@@ -264,8 +279,4 @@ public class AdminPromotionFunctionality extends BaseFunctionality {
         return refuseButton;
     }
 
-
-    //================================================================================
-    // Accessors
-    //================================================================================
 }

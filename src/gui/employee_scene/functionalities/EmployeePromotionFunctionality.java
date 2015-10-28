@@ -22,6 +22,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class EmployeePromotionFunctionality extends BaseFunctionality {
@@ -59,6 +60,9 @@ public class EmployeePromotionFunctionality extends BaseFunctionality {
     public Pane loadContent() {
         GridPane gPane = new GridPane();
 
+        gPane.setHgap(20);
+        gPane.setVgap(20);
+        
         gPane.setAlignment(Pos.CENTER);
 
         initializeCheckBoxes();
@@ -72,6 +76,8 @@ public class EmployeePromotionFunctionality extends BaseFunctionality {
 
         mainPane = new VBox();
 
+        mainPane.setSpacing(20);
+        
         mainPane.setAlignment(Pos.CENTER);
 
         mainPane.getChildren().add(gPane);
@@ -204,13 +210,15 @@ public class EmployeePromotionFunctionality extends BaseFunctionality {
         for(Node x : mainPane.getChildren()) {
             x.setDisable(true);
         }
-        mainPane.getChildren().add(new Label("You cannot have more than one\npromotion request at the time."));
+        Label label = new Label("You cannot have more than one\npromotion request at the time.");
+        label.setTextFill(Color.RED);
+        mainPane.getChildren().add(label);
     }
     
     private boolean isRequestAvailable() {
         List<Promotion> promotions = rManager.getAllPromotions();
         for(Promotion x : promotions) {
-            if(x.getEmployeeID() == root.getEmployee().getID()) { // not sure, test
+            if(x.getEmployeeID() == root.getEmployee().getID()) {
                 return false;
             }
         }
