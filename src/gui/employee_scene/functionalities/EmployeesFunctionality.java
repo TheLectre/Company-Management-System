@@ -96,7 +96,7 @@ public class EmployeesFunctionality extends BaseFunctionality {
                 HBox buttonBox = new HBox();
                 buttonBox.setSpacing(15);
                 buttonBox.setAlignment(Pos.CENTER);
-                buttonBox.getChildren().addAll(removeEmployeeButton, addEmployeeButton, addNewTeamButton, deleteTeamButton);
+                buttonBox.getChildren().addAll(removeEmployeeButton, addEmployeeButton, deleteTeamButton, addNewTeamButton);
                 mainPane.getChildren().add(buttonBox);
 
                 refreshAdminView(false);
@@ -228,7 +228,6 @@ public class EmployeesFunctionality extends BaseFunctionality {
             refreshTeamTableForAll();
             addEmployeeButton.setDisable(true);
             removeEmployeeButton.setDisable(true);
-            addNewTeamButton.setDisable(true);
             deleteTeamButton.setDisable(true);
         } else {
             refreshTeamTable(comboBox.getValue().getID());
@@ -237,9 +236,6 @@ public class EmployeesFunctionality extends BaseFunctionality {
             }
             if (removeEmployeeButton.isDisabled()) {
                 removeEmployeeButton.setDisable(false);
-            }
-            if(addNewTeamButton.isDisable()) {
-                addNewTeamButton.setDisable(false);
             }
             if(deleteTeamButton.isDisable()) {
                 deleteTeamButton.setDisable(false);
@@ -274,6 +270,7 @@ public class EmployeesFunctionality extends BaseFunctionality {
 
                 for (Employee p : teamFreeEmployees) {
                     HBox hBox = new HBox();
+                    hBox.setSpacing(20);
 
                     CheckBox checkBox = new CheckBox();
                     checkBox.setOnAction(new EventHandler<ActionEvent>() {
@@ -367,6 +364,8 @@ public class EmployeesFunctionality extends BaseFunctionality {
                 //ui
                 Stage removeEmployeesStage = new Stage();
                 VBox majorBox = new VBox();
+                majorBox.setAlignment(Pos.CENTER);
+                majorBox.setSpacing(20);
                 Label infoLabel = new Label("Choose action for " + (removeCandidatesIDs.isEmpty() ? "no" : removeCandidatesIDs.size()) + "employees");
                 majorBox.getChildren().add(infoLabel);
                 Label secondInfoLabel = new Label((removeCandidatesIDs.isEmpty() ? "Select employees first" : "Action cannot be reverted"));
@@ -383,6 +382,8 @@ public class EmployeesFunctionality extends BaseFunctionality {
                     majorBox.getChildren().add(okButton);
                 } else {
                     HBox buttonBox = new HBox();
+                    buttonBox.setAlignment(Pos.CENTER);
+                    buttonBox.setSpacing(20);
                     Button removeButton = new Button("Remove");
                     removeButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -444,6 +445,7 @@ public class EmployeesFunctionality extends BaseFunctionality {
                 stage.setTitle("Creating team");
 
                 TextField teamNameField = new TextField();
+                teamNameField.setMaxWidth(150);
                 teamNameField.setPromptText("Team name");
 
                 ComboBox<String> technologyComboBox = new ComboBox<>();
@@ -485,9 +487,13 @@ public class EmployeesFunctionality extends BaseFunctionality {
                 });
 
                 HBox buttons = new HBox();
+                buttons.setAlignment(Pos.CENTER);
+                buttons.setSpacing(20);
                 buttons.getChildren().addAll(addButton, cancelButton);
 
                 VBox majorPane = new VBox();
+                majorPane.setAlignment(Pos.CENTER);
+                majorPane.setSpacing(20);
                 majorPane.getChildren().addAll(teamNameField, technologyComboBox, buttons, errorLabel);
 
                 stage.setScene(new Scene(majorPane, 400, 300));
@@ -534,9 +540,13 @@ public class EmployeesFunctionality extends BaseFunctionality {
                 });
 
                 HBox buttonsPane = new HBox();
+                buttonsPane.setAlignment(Pos.CENTER);
+                buttonsPane.setSpacing(20);
                 buttonsPane.getChildren().addAll(okButton, cancelButton);
 
                 VBox majorPane = new VBox();
+                majorPane.setAlignment(Pos.CENTER);
+                majorPane.setSpacing(20);
                 majorPane.getChildren().addAll(infoLabel, secondInfoLabel, thirdInfoLabel, buttonsPane);
 
                 stage.setScene(new Scene(majorPane, 300, 200));

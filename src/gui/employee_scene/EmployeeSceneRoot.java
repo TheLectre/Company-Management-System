@@ -12,7 +12,10 @@ import gui.employee_scene.functionalities.EmployeesFunctionality;
 import gui.employee_scene.functionalities.StatisticsFunctionality;
 import gui.employee_scene.functionalities.TechnologiesFunctioanlity;
 import java.util.ArrayList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -23,6 +26,7 @@ public class EmployeeSceneRoot extends BorderPane {
     // Fields
     //================================================================================
     
+    private ToolBar headBar;
     private ResourcesManager rManager;
     private Employee employee;
     private ArrayList<BaseFunctionality> functionalities;
@@ -46,13 +50,14 @@ public class EmployeeSceneRoot extends BorderPane {
     //================================================================================
     
     private void initiateHead() {
-        ToolBar tb = new ToolBar();
+        headBar = new ToolBar();
+        headBar.setPadding(new Insets(10, 5, 10, 5));
         
         for(BaseFunctionality bf : functionalities) {
-            tb.getItems().add(bf.button);
+            headBar.getItems().add(bf.button);
         }
         
-        this.setTop(tb);
+        this.setTop(headBar);
     }
     
     private void initiateFunctionalities() {
@@ -68,6 +73,7 @@ public class EmployeeSceneRoot extends BorderPane {
             functionalities.add(new ChangePasswordFunctionality(this, rManager));
         }
         else {
+            
             functionalities.add(new EmployeesFunctionality(this, rManager));
             functionalities.add(new EmployeePromotionFunctionality(this, rManager));
             functionalities.add(new MessageFunctionality(this, rManager));

@@ -161,7 +161,7 @@ public class StatisticsFunctionality extends BaseFunctionality {
         table[5][0] = new Label("All");
 
         for(int i=0;i<width;i++) {
-            table[i][0].setFont(Font.font(null, FontWeight.BOLD, 12));
+            table[i][0].setFont(Font.font(null, FontWeight.BOLD, 11));
         }
         
         //row names

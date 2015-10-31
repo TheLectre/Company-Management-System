@@ -27,7 +27,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
 public class TechnologiesFunctioanlity extends BaseFunctionality {
@@ -253,8 +252,8 @@ public class TechnologiesFunctioanlity extends BaseFunctionality {
     private HBox createMainPane() {
         HBox pane = new HBox();
         pane.setAlignment(Pos.CENTER);
-        pane.setPadding(new Insets(15, 15, 15, 15));
-        pane.setSpacing(15);
+        pane.setPadding(new Insets(10, 10, 10, 10));
+        pane.setSpacing(10);
         
         return pane;
     }
